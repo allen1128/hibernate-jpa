@@ -1,0 +1,38 @@
+Thumbs.db
+.DS_Store
+.project
+.settings
+/gen/
+/bin/
+/gradle/
+target/
+*!.mvn/*
+/build/
+/out/
+*mvnw.*
+*mvnw
+*MANIFEST.MF
+*maven-wrapper.properties
+**/.mvn/wrapper/*
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
