@@ -50,8 +50,8 @@ public class Bank {
 	private String createdBy;
 	
 	@ElementCollection
-	@CollectionTable(name = "BANK_CONTACT", joinColumns = @JoinColumn(name = "BANK_ID"))
-	@Column(name = "NAME")
+	@CollectionTable(name="BANK_CONTACT", joinColumns=@JoinColumn(name="BANK_ID"))
+	@Column(name="NAME")
 	private Collection<String> contacts = new ArrayList<String>();
 
 	public Long getBankId() {
