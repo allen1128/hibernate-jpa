@@ -12,7 +12,7 @@ public class Application {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		session.beginTransaction();
 		User user = new User();
-		user.setBirthDate(new Date());
+		user.setBirthDate(new Date("1987/11/14"));
 		user.setCreatedBy("me");
 		user.setEmailAddress("test@test.com");
 		user.setFirstName("first");
@@ -21,14 +21,10 @@ public class Application {
 		user.setLastUpdatedDate(new Date());
 		user.setLastUpdatedBy("me");
 		session.save(user);
-		session.getTransaction().commit();
+		session.getTransaction().commit();		
 		
-		session.beginTransaction();		
-		User fromDbUser = (User) session.get(User.class, user.getUserId());
-		//fromDbUser.setCreatedBy("you");
-		fromDbUser.setEmailAddress("newtest@test.com");
-		session.update(fromDbUser);
-		session.getTransaction().commit();
+		session.refresh(user);
+		System.out.println("age: " + user.getAge());
 		session.close();
 	}
 }

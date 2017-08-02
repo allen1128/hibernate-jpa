@@ -13,6 +13,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Formula;
+
 import javassist.expr.NewArray;
 
 @Entity
@@ -56,6 +58,9 @@ public class User implements java.io.Serializable {
 	
 	@Transient
 	private boolean valid;
+	
+	@Formula("lower(datediff(curdate(), birth_date)/365)")
+	private int age;
 
 	public Long getUserId() {
 		return userId;
@@ -135,5 +140,13 @@ public class User implements java.io.Serializable {
 
 	public void setValid(boolean valid) {
 		this.valid = valid;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
 	}
 }
