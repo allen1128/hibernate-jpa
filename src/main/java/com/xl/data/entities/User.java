@@ -4,7 +4,10 @@ import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -58,6 +61,11 @@ public class User implements java.io.Serializable {
 	
 	@Transient
 	private boolean valid;
+	
+	@Embedded
+	@AttributeOverrides({@AttributeOverride(name="addressLine1", column=@Column(name="USER_ADDRESS_LINE_1")),
+		@AttributeOverride(name="addressLine2", column=@Column(name="USER_ADDRESS_LINE_2"))})
+	private Address address;
 	
 	@Formula("lower(datediff(curdate(), birth_date)/365)")
 	private int age;
@@ -144,6 +152,14 @@ public class User implements java.io.Serializable {
 
 	public int getAge() {
 		return age;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	public void setAge(int age) {
