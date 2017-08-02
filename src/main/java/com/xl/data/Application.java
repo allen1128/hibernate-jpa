@@ -22,6 +22,14 @@ public class Application {
 		user.setLastUpdatedBy("me");
 		session.save(user);
 		session.getTransaction().commit();
+		
+		session.beginTransaction();		
+		User fromDbUser = (User) session.get(User.class, user.getUserId());
+		//fromDbUser.setCreatedBy("you");
+		fromDbUser.setEmailAddress("newtest@test.com");
+		fromDbUser.setCreatedBy("you");
+		session.update(fromDbUser);
+		session.getTransaction().commit();
 		session.close();
 	}
 }

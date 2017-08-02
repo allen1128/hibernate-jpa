@@ -2,6 +2,8 @@ package com.xl.data.entities;
 
 import java.util.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,38 +12,39 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="USER")
-public class User implements java.io.Serializable{
-	
+@Table(name = "USER")
+@Access(value = AccessType.FIELD)
+public class User implements java.io.Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="USER_ID")
-	private Long userId;	
-	
-	@Column(name="FIRST_NAME")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "USER_ID")
+	private Long userId;
+
+	@Column(name = "FIRST_NAME", nullable = false)
 	private String firstName;
 
-	@Column(name="LAST_NAME")
+	@Column(name = "LAST_NAME", nullable = false)
 	private String lastName;
 
-	@Column(name="BIRTH_DATE")
+	@Column(name = "BIRTH_DATE", nullable = false)
 	private Date birthDate;
 
-	@Column(name="EMAIL_ADDRESS")
+	@Column(name = "EMAIL_ADDRESS", nullable = false)
 	private String emailAddress;
 
-	@Column(name="LAST_UPDATED_DATE")
+	@Column(name = "LAST_UPDATED_DATE")
 	private Date lastUpdatedDate;
 
-	@Column(name="LAST_UPDATED_BY")
+	@Column(name = "LAST_UPDATED_BY")
 	private String lastUpdatedBy;
 
-	@Column(name="CREATED_DATE")
+	@Column(name = "CREATED_DATE", updatable = false)
 	private Date createdDate;
 
-	@Column(name="CREATED_BY")
+	@Column(name = "CREATED_BY", updatable = false)
 	private String createdBy;
 
 	public Long getUserId() {
