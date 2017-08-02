@@ -11,13 +11,17 @@ public class Application {
 	public static void main(String[] args){
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		session.beginTransaction();
-//		User user = new User();
-//		user.setBirthDate(new Date());
-//		user.setCreatedBy("me");
-//		user.setCreatedDate(new Date());
-//		user.setLastUpdatedDate(new Date());
-//		session.save(user);
-//		session.getTransaction().commit();
+		User user = new User();
+		user.setBirthDate(new Date());
+		user.setCreatedBy("me");
+		user.setEmailAddress("test@test.com");
+		user.setFirstName("first");
+		user.setLastName("last");
+		user.setCreatedDate(new Date());
+		user.setLastUpdatedDate(new Date());
+		user.setLastUpdatedBy("me");
+		session.save(user);
+		session.getTransaction().commit();
 		session.close();
 	}
 }

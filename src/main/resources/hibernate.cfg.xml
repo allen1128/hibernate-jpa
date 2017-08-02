@@ -4,23 +4,13 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
-
     <session-factory>
-
-        <!-- Database connection settings -->
-        <property name="connection.driver_class">com.mysql.jdbc.jdbcDriver</property>
-        <property name="connection.url">jdbc:mysql://localhost:3306/finances</property>
-        <property name="connection.username">finance</property>
-        <property name="connection.password"></property>
-
-        <!-- SQL dialect -->
-        <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
-        
-                <!-- Echo all executed SQL to stdout -->
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/finance</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password"></property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
         <property name="show_sql">true</property>
-
-        <mapping resource="com.xl.data.entities.User"/>
-
+        <mapping class="com.xl.data.entities.User"/>
     </session-factory>
-
 </hibernate-configuration>

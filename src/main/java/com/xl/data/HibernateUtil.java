@@ -1,26 +1,20 @@
 package com.xl.data;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
+import org.hibernate.cfg.AnnotationConfiguration;
 
+@SuppressWarnings("deprecation")
 public class HibernateUtil {
 	private static final SessionFactory sessionFactory = buildSessionFactory();
 
 	private static SessionFactory buildSessionFactory() {
-		SessionFactory sessionFactory = null;
 		try {
-			Configuration configuration = new Configuration();
-			sessionFactory = configuration.buildSessionFactory(
-					new StandardServiceRegistryBuilder()
-						.applySettings(configuration.getProperties())
-						.build());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new RuntimeException("Error building session factory");
-		}
+			return new AnnotationConfiguration().configure().buildSessionFactory();
 
-		return sessionFactory;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("There was an error building the factory");
+		}
 	}
 
 	public static SessionFactory getSessionFactory() {
