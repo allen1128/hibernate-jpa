@@ -1,24 +1,26 @@
 package com.xl.data.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Formula;
-
-import javassist.expr.NewArray;
 
 @Entity
 @Table(name = "USER")
@@ -61,11 +63,13 @@ public class User implements java.io.Serializable {
 	
 	@Transient
 	private boolean valid;
+
 	
-	@Embedded
+	@ElementCollection
+	@CollectionTable(name="USER_ADDRESS", joinColumns=@JoinColumn(name="USER_ID"))
 	@AttributeOverrides({@AttributeOverride(name="addressLine1", column=@Column(name="USER_ADDRESS_LINE_1")),
 		@AttributeOverride(name="addressLine2", column=@Column(name="USER_ADDRESS_LINE_2"))})
-	private Address address;
+	private List<Address> address = new ArrayList<Address>();
 	
 	@Formula("lower(datediff(curdate(), birth_date)/365)")
 	private int age;
@@ -154,15 +158,16 @@ public class User implements java.io.Serializable {
 		return age;
 	}
 
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
 
 	public void setAge(int age) {
 		this.age = age;
+	}
+
+	public List<Address> getAddress() {
+		return address;
+	}
+
+	public void setAddress(List<Address> address) {
+		this.address = address;
 	}
 }
