@@ -1,6 +1,5 @@
 package com.xl.data.entities;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;

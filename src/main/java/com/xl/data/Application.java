@@ -1,13 +1,15 @@
 package com.xl.data;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 
 import org.hibernate.Session;
 
 import com.xl.data.entities.Account;
-import com.xl.data.entities.Budget;
-import com.xl.data.entities.Transaction;
+import com.xl.data.entities.Address;
+import com.xl.data.entities.Credential;
+import com.xl.data.entities.User;
 
 public class Application {
 
@@ -48,51 +50,53 @@ public class Application {
 		session.save(credential);*/
 		
 		Account account = createNewAccount();
-		Budget budget = new Budget();
-		budget.setGoalAmount(new BigDecimal("10000.00"));
-		budget.setName("Emergency Fund");
-		budget.setPeriod("Yearly");		
-		budget.getTransactions().add(createNewBeltPurchase(account));
-		budget.getTransactions().add(createShoePurchase(account));
-		session.save(budget);
+		Account account2 = createNewAccount();
+		User user = createUser();
+		User user2 = createUser();
+		
+		account.getUsers().add(user);
+		account.getUsers().add(user2);
+		account2.getUsers().add(user);
+		account2.getUsers().add(user2);
+		
+		session.save(account);
+		session.save(account2);
 		transaction.commit();
 		
-		Transaction transaction2 = (Transaction) session.get(Transaction.class, account.getTransactions().get(0).getTransactionId());
-		System.out.println("account name:" + transaction2.getAccount().getName());
+		User user3 = (User) session.get(User.class, user.getUserId());
+		System.out.println("account name:" + user3.getFirstName());
+	}
+	private static Credential createCredential(User user) {
+		Credential credential = new Credential();
+		credential.setUser(user);
+		credential.setUsername("test_username");
+		credential.setPassword("test_password");
+		return credential;
 	}
 
-	private static Transaction createNewBeltPurchase(Account account) {
-		Transaction beltPurchase = new Transaction();
-		beltPurchase.setTitle("Dress Belt 2");
-		beltPurchase.setAmount(new BigDecimal("50.00"));
-		beltPurchase.setClosingBalance(new BigDecimal("0.00"));
-		beltPurchase.setCreatedBy("Kevin Bowersox");
-		beltPurchase.setCreatedDate(new Date());
-		beltPurchase.setInitialBalance(new BigDecimal("0.00"));
-		beltPurchase.setLastUpdatedBy("Kevin Bowersox");
-		beltPurchase.setLastUpdatedDate(new Date());
-		beltPurchase.setNotes("New Dress Belt");
-		beltPurchase.setTransactionType("Debit");
-		beltPurchase.setAccount(account);
-		account.getTransactions().add(beltPurchase);
-		return beltPurchase;
+	private static Address createAddress() {
+		Address address = new Address();
+		address.setAddressLine1("101 Address Line");
+		address.setAddressLine2("102 Address Line");
+		address.setCity("New York");
+		address.setState("PA");
+		address.setZipCode("10000");
+		return address;
 	}
 
-	private static Transaction createShoePurchase(Account account) {
-		Transaction shoePurchase = new Transaction();
-		shoePurchase.setTitle("Work Shoes 2");
-		shoePurchase.setAmount(new BigDecimal("100.00"));
-		shoePurchase.setClosingBalance(new BigDecimal("0.00"));
-		shoePurchase.setCreatedBy("Kevin Bowersox");
-		shoePurchase.setCreatedDate(new Date());
-		shoePurchase.setInitialBalance(new BigDecimal("0.00"));
-		shoePurchase.setLastUpdatedBy("Kevin Bowersox");
-		shoePurchase.setLastUpdatedDate(new Date());
-		shoePurchase.setNotes("Nice Pair of Shoes");
-		shoePurchase.setTransactionType("Debit");
-		shoePurchase.setAccount(account);
-		account.getTransactions().add(shoePurchase);
-		return shoePurchase;
+	private static User createUser() {
+		User user = new User();
+		user.setAddress(Arrays.asList(new Address[]{createAddress()}));
+		user.setBirthDate(new Date());
+		user.setCreatedBy("Kevin Bowersox");
+		user.setCreatedDate(new Date());
+		user.setCredential(createCredential(user));
+		user.setEmailAddress("test@test.com");
+		user.setFirstName("John 2");
+		user.setLastName("Doe");
+		user.setLastUpdatedBy("system");
+		user.setLastUpdatedDate(new Date());
+		return user;
 	}
 
 	private static Account createNewAccount() {
@@ -101,12 +105,11 @@ public class Application {
 		account.setOpenDate(new Date());
 		account.setCreatedBy("Kevin Bowersox");
 		account.setInitialBalance(new BigDecimal("50.00"));
-		account.setName("Savings Account 3");
+		account.setName("Savings Account 2");
 		account.setCurrentBalance(new BigDecimal("100.00"));
 		account.setLastUpdatedBy("Kevin Bowersox");
 		account.setLastUpdatedDate(new Date());
 		account.setCreatedDate(new Date());
-		
 		return account;
 	}
 }
