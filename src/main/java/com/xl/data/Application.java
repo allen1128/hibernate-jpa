@@ -57,14 +57,20 @@ public class Application {
 		account.getUsers().add(user);
 		account.getUsers().add(user2);
 		account2.getUsers().add(user);
-		account2.getUsers().add(user2);
+		account2.getUsers().add(user2);		
+		
+		user.getAccounts().add(account);
+		user2.getAccounts().add(account);
+		user.getAccounts().add(account2);
+		user2.getAccounts().add(account2);
 		
 		session.save(account);
 		session.save(account2);
 		transaction.commit();
 		
-		User user3 = (User) session.get(User.class, user.getUserId());
-		System.out.println("account name:" + user3.getFirstName());
+		User dbUser =  (User) session.get(User.class, user.getUserId());
+		System.out.println("account name:" + dbUser.getAccounts().iterator().next().getAccountId());
+		
 	}
 	private static Credential createCredential(User user) {
 		Credential credential = new Credential();

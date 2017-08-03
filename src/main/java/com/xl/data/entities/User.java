@@ -2,12 +2,15 @@ package com.xl.data.entities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -15,6 +18,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -22,6 +26,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Formula;
+
+import javassist.expr.NewArray;
 
 @Entity
 @Table(name = "USER")
@@ -40,6 +46,9 @@ public class User implements java.io.Serializable {
 
 	@Column(name = "LAST_NAME", nullable = false)
 	private String lastName;
+	
+	@ManyToMany(cascade=CascadeType.ALL, mappedBy="users")
+	private Set<Account> accounts = new HashSet<>();
 
 	@Column(name = "BIRTH_DATE", nullable = false)
 	@Temporal(TemporalType.DATE)
@@ -152,6 +161,14 @@ public class User implements java.io.Serializable {
 
 	public boolean isValid() {
 		return valid;
+	}
+
+	public Set<Account> getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(Set<Account> accounts) {
+		this.accounts = accounts;
 	}
 
 	public void setValid(boolean valid) {
