@@ -6,6 +6,7 @@ import java.util.Date;
 import org.hibernate.Session;
 
 import com.xl.data.entities.Account;
+import com.xl.data.entities.Budget;
 import com.xl.data.entities.Transaction;
 
 public class Application {
@@ -47,9 +48,13 @@ public class Application {
 		session.save(credential);*/
 		
 		Account account = createNewAccount();
-		account.getTransactions().add(createNewBeltPurchase(account));
-		account.getTransactions().add(createShoePurchase(account));
-		session.save(account);
+		Budget budget = new Budget();
+		budget.setGoalAmount(new BigDecimal("10000.00"));
+		budget.setName("Emergency Fund");
+		budget.setPeriod("Yearly");		
+		budget.getTransactions().add(createNewBeltPurchase(account));
+		budget.getTransactions().add(createShoePurchase(account));
+		session.save(budget);
 		transaction.commit();
 		
 		Transaction transaction2 = (Transaction) session.get(Transaction.class, account.getTransactions().get(0).getTransactionId());
@@ -58,7 +63,7 @@ public class Application {
 
 	private static Transaction createNewBeltPurchase(Account account) {
 		Transaction beltPurchase = new Transaction();
-		beltPurchase.setTitle("Dress Belt");
+		beltPurchase.setTitle("Dress Belt 2");
 		beltPurchase.setAmount(new BigDecimal("50.00"));
 		beltPurchase.setClosingBalance(new BigDecimal("0.00"));
 		beltPurchase.setCreatedBy("Kevin Bowersox");
@@ -69,12 +74,13 @@ public class Application {
 		beltPurchase.setNotes("New Dress Belt");
 		beltPurchase.setTransactionType("Debit");
 		beltPurchase.setAccount(account);
+		account.getTransactions().add(beltPurchase);
 		return beltPurchase;
 	}
 
 	private static Transaction createShoePurchase(Account account) {
 		Transaction shoePurchase = new Transaction();
-		shoePurchase.setTitle("Work Shoes");
+		shoePurchase.setTitle("Work Shoes 2");
 		shoePurchase.setAmount(new BigDecimal("100.00"));
 		shoePurchase.setClosingBalance(new BigDecimal("0.00"));
 		shoePurchase.setCreatedBy("Kevin Bowersox");
@@ -85,6 +91,7 @@ public class Application {
 		shoePurchase.setNotes("Nice Pair of Shoes");
 		shoePurchase.setTransactionType("Debit");
 		shoePurchase.setAccount(account);
+		account.getTransactions().add(shoePurchase);
 		return shoePurchase;
 	}
 
@@ -94,11 +101,12 @@ public class Application {
 		account.setOpenDate(new Date());
 		account.setCreatedBy("Kevin Bowersox");
 		account.setInitialBalance(new BigDecimal("50.00"));
-		account.setName("Savings Account 2");
+		account.setName("Savings Account 3");
 		account.setCurrentBalance(new BigDecimal("100.00"));
 		account.setLastUpdatedBy("Kevin Bowersox");
 		account.setLastUpdatedDate(new Date());
 		account.setCreatedDate(new Date());
+		
 		return account;
 	}
 }
