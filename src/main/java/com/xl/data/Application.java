@@ -5,6 +5,7 @@ import java.util.Date;
 import org.hibernate.Session;
 
 import com.xl.data.entities.Address;
+import com.xl.data.entities.Credential;
 import com.xl.data.entities.User;
 
 public class Application {
@@ -42,8 +43,13 @@ public class Application {
 		user.getAddress().add(address);
 		user.getAddress().add(address2);
 		setUserFields(user);
-
-		session.save(user);
+		
+		Credential credential = new Credential();
+		credential.setPassword("password");
+		credential.setUsername("test1234");
+		credential.setUser(user);
+		session.save(credential);
+		
 		session.getTransaction().commit();
 		
 	}
