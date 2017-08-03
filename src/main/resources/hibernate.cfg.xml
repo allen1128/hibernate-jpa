@@ -14,5 +14,7 @@
         <mapping class="com.xl.data.entities.User"/>
         <mapping class="com.xl.data.entities.Bank"/>
         <mapping class="com.xl.data.entities.Credential"/>
+        <mapping class="com.xl.data.entities.Account"/>
+        <mapping class="com.xl.data.entities.Transaction"/>
     </session-factory>
 </hibernate-configuration>

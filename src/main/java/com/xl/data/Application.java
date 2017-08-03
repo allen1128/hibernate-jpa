@@ -1,19 +1,18 @@
 package com.xl.data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
-import com.xl.data.entities.Address;
-import com.xl.data.entities.Credential;
-import com.xl.data.entities.User;
+import com.xl.data.entities.Account;
+import com.xl.data.entities.Transaction;
 
 public class Application {
 
 	public static void main(String[] args) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
-		Transaction transaction = session.beginTransaction();
+		org.hibernate.Transaction transaction = session.beginTransaction();
 
 		/*
 		 * User user = new User(); Address address = new Address();
@@ -30,7 +29,7 @@ public class Application {
 		 * user.setAddress(address);
 		 */
 
-		User user = new User();
+		/*User user = new User();
 
 		Address address = new Address();
 		Address address2 = new Address();
@@ -45,39 +44,57 @@ public class Application {
 		credential.setUsername("test1234");
 		credential.setUser(user);
 		user.setCredential(credential);
-		session.save(credential);
+		session.save(credential);*/
+		
+		Account account = createNewAccount();
+		account.getTransactions().add(createNewBeltPurchase());
+		account.getTransactions().add(createShoePurchase());
+		session.save(account);
 
 		transaction.commit();
-		
-		User dbUser = (User) session.get(User.class, credential.getUser().getUserId());
-		System.out.println("credential id:" + dbUser.getFirstName());		
 	}
 
-	private static void setUserFields(User user) {
-		user.setAge(22);
-		user.setBirthDate(new Date());
-		user.setCreatedBy("kmb");
-		user.setCreatedDate(new Date());
-		user.setEmailAddress("kmb385");
-		user.setFirstName("Kevin2");
-		user.setLastName("bowersox");
-		user.setLastUpdatedBy("kevin");
-		user.setLastUpdatedDate(new Date());
+	private static Transaction createNewBeltPurchase() {
+		Transaction beltPurchase = new Transaction();
+		beltPurchase.setTitle("Dress Belt");
+		beltPurchase.setAmount(new BigDecimal("50.00"));
+		beltPurchase.setClosingBalance(new BigDecimal("0.00"));
+		beltPurchase.setCreatedBy("Kevin Bowersox");
+		beltPurchase.setCreatedDate(new Date());
+		beltPurchase.setInitialBalance(new BigDecimal("0.00"));
+		beltPurchase.setLastUpdatedBy("Kevin Bowersox");
+		beltPurchase.setLastUpdatedDate(new Date());
+		beltPurchase.setNotes("New Dress Belt");
+		beltPurchase.setTransactionType("Debit");
+		return beltPurchase;
 	}
 
-	private static void setAddressFields(Address address) {
-		address.setAddressLine1("Line 1");
-		address.setAddressLine2("Line 2");
-		address.setCity("New York");
-		address.setState("NY");
-		address.setZipCode("12345");
+	private static Transaction createShoePurchase() {
+		Transaction shoePurchase = new Transaction();
+		shoePurchase.setTitle("Work Shoes");
+		shoePurchase.setAmount(new BigDecimal("100.00"));
+		shoePurchase.setClosingBalance(new BigDecimal("0.00"));
+		shoePurchase.setCreatedBy("Kevin Bowersox");
+		shoePurchase.setCreatedDate(new Date());
+		shoePurchase.setInitialBalance(new BigDecimal("0.00"));
+		shoePurchase.setLastUpdatedBy("Kevin Bowersox");
+		shoePurchase.setLastUpdatedDate(new Date());
+		shoePurchase.setNotes("Nice Pair of Shoes");
+		shoePurchase.setTransactionType("Debit");
+		return shoePurchase;
 	}
 
-	private static void setAddressFields2(Address address) {
-		address.setAddressLine1("Line 3");
-		address.setAddressLine2("Line 4");
-		address.setCity("Corning");
-		address.setState("NY");
-		address.setZipCode("12345");
+	private static Account createNewAccount() {
+		Account account = new Account();
+		account.setCloseDate(new Date());
+		account.setOpenDate(new Date());
+		account.setCreatedBy("Kevin Bowersox");
+		account.setInitialBalance(new BigDecimal("50.00"));
+		account.setName("Savings Account");
+		account.setCurrentBalance(new BigDecimal("100.00"));
+		account.setLastUpdatedBy("Kevin Bowersox");
+		account.setLastUpdatedDate(new Date());
+		account.setCreatedDate(new Date());
+		return account;
 	}
 }
