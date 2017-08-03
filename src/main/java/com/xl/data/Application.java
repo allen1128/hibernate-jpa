@@ -47,14 +47,16 @@ public class Application {
 		session.save(credential);*/
 		
 		Account account = createNewAccount();
-		account.getTransactions().add(createNewBeltPurchase());
-		account.getTransactions().add(createShoePurchase());
+		account.getTransactions().add(createNewBeltPurchase(account));
+		account.getTransactions().add(createShoePurchase(account));
 		session.save(account);
-
 		transaction.commit();
+		
+		Transaction transaction2 = (Transaction) session.get(Transaction.class, account.getTransactions().get(0).getTransactionId());
+		System.out.println("account name:" + transaction2.getAccount().getName());
 	}
 
-	private static Transaction createNewBeltPurchase() {
+	private static Transaction createNewBeltPurchase(Account account) {
 		Transaction beltPurchase = new Transaction();
 		beltPurchase.setTitle("Dress Belt");
 		beltPurchase.setAmount(new BigDecimal("50.00"));
@@ -66,10 +68,11 @@ public class Application {
 		beltPurchase.setLastUpdatedDate(new Date());
 		beltPurchase.setNotes("New Dress Belt");
 		beltPurchase.setTransactionType("Debit");
+		beltPurchase.setAccount(account);
 		return beltPurchase;
 	}
 
-	private static Transaction createShoePurchase() {
+	private static Transaction createShoePurchase(Account account) {
 		Transaction shoePurchase = new Transaction();
 		shoePurchase.setTitle("Work Shoes");
 		shoePurchase.setAmount(new BigDecimal("100.00"));
@@ -81,6 +84,7 @@ public class Application {
 		shoePurchase.setLastUpdatedDate(new Date());
 		shoePurchase.setNotes("Nice Pair of Shoes");
 		shoePurchase.setTransactionType("Debit");
+		shoePurchase.setAccount(account);
 		return shoePurchase;
 	}
 
@@ -90,7 +94,7 @@ public class Application {
 		account.setOpenDate(new Date());
 		account.setCreatedBy("Kevin Bowersox");
 		account.setInitialBalance(new BigDecimal("50.00"));
-		account.setName("Savings Account");
+		account.setName("Savings Account 2");
 		account.setCurrentBalance(new BigDecimal("100.00"));
 		account.setLastUpdatedBy("Kevin Bowersox");
 		account.setLastUpdatedDate(new Date());
