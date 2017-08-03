@@ -3,39 +3,35 @@ package com.xl.data;
 import java.util.Date;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.xl.data.entities.Address;
 import com.xl.data.entities.Credential;
 import com.xl.data.entities.User;
 
 public class Application {
-	
-	public static void main(String[] args){
+
+	public static void main(String[] args) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
-		session.beginTransaction();
-			
-		/*User user = new User();
-		Address address = new Address();
-		user.setAge(22);
-		user.setBirthDate(new Date());
-		user.setCreatedBy("Kevin");
-		user.setCreatedDate(new Date());
-		user.setEmailAddress("kmb3");
-		user.setFirstName("kevin");
-		user.setLastName("bowersox");
-		user.setLastUpdatedBy("kmb");
-		user.setLastUpdatedDate(new Date());
-		
-		address.setAddressLine1("line 1");
-		address.setAddressLine2("line2");
-		address.setCity("Philadelphia");
-		address.setState("PA");
-		address.setZipCode("12345");
-		
-		user.setAddress(address);*/
-		
+		Transaction transaction = session.beginTransaction();
+
+		/*
+		 * User user = new User(); Address address = new Address();
+		 * user.setAge(22); user.setBirthDate(new Date());
+		 * user.setCreatedBy("Kevin"); user.setCreatedDate(new Date());
+		 * user.setEmailAddress("kmb3"); user.setFirstName("kevin");
+		 * user.setLastName("bowersox"); user.setLastUpdatedBy("kmb");
+		 * user.setLastUpdatedDate(new Date());
+		 * 
+		 * address.setAddressLine1("line 1"); address.setAddressLine2("line2");
+		 * address.setCity("Philadelphia"); address.setState("PA");
+		 * address.setZipCode("12345");
+		 * 
+		 * user.setAddress(address);
+		 */
+
 		User user = new User();
-		
+
 		Address address = new Address();
 		Address address2 = new Address();
 		setAddressFields(address);
@@ -43,17 +39,19 @@ public class Application {
 		user.getAddress().add(address);
 		user.getAddress().add(address2);
 		setUserFields(user);
-		
+
 		Credential credential = new Credential();
 		credential.setPassword("password");
 		credential.setUsername("test1234");
 		credential.setUser(user);
+		user.setCredential(credential);
 		session.save(credential);
+
+		transaction.commit();
 		
-		session.getTransaction().commit();
-		
+		User dbUser = (User) session.get(User.class, credential.getUser().getUserId());
+		System.out.println("credential id:" + dbUser.getFirstName());		
 	}
-	
 
 	private static void setUserFields(User user) {
 		user.setAge(22);
@@ -61,7 +59,7 @@ public class Application {
 		user.setCreatedBy("kmb");
 		user.setCreatedDate(new Date());
 		user.setEmailAddress("kmb385");
-		user.setFirstName("Kevin");
+		user.setFirstName("Kevin2");
 		user.setLastName("bowersox");
 		user.setLastUpdatedBy("kevin");
 		user.setLastUpdatedDate(new Date());

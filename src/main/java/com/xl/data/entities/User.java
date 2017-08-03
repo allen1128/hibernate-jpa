@@ -15,6 +15,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -73,6 +74,9 @@ public class User implements java.io.Serializable {
 	
 	@Formula("lower(datediff(curdate(), birth_date)/365)")
 	private int age;
+	
+	@OneToOne(mappedBy="user")
+	private Credential credential;
 
 	public Long getUserId() {
 		return userId;
@@ -169,5 +173,13 @@ public class User implements java.io.Serializable {
 
 	public void setAddress(List<Address> address) {
 		this.address = address;
+	}
+
+	public Credential getCredential() {
+		return credential;
+	}
+
+	public void setCredential(Credential credential) {
+		this.credential = credential;
 	}
 }
