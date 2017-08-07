@@ -10,6 +10,8 @@ import com.xl.data.entities.Address;
 import com.xl.data.entities.Bank;
 import com.xl.data.entities.Bond;
 import com.xl.data.entities.Credential;
+import com.xl.data.entities.Investment;
+import com.xl.data.entities.Portfolio;
 import com.xl.data.entities.Stock;
 import com.xl.data.entities.Transaction;
 import com.xl.data.entities.User;
@@ -20,13 +22,34 @@ public class Application {
 		Session session = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			org.hibernate.Transaction transaction = session.beginTransaction();			
+			org.hibernate.Transaction transaction = session.beginTransaction();
+			Portfolio portfolio = new Portfolio();
+			portfolio.setName("Risk Aversive");
+
 			Stock stock = createStock();
+			stock.setPortfolio(portfolio);
 			session.save(stock);
-			transaction.commit();			
+
+			Bond bond = createBond();
+			bond.setPortfolio(portfolio);
+
+			portfolio.getInvestements().add(stock);
+			portfolio.getInvestements().add(bond);
+			session.save(stock);
+			session.save(bond);
+
+			transaction.commit();
+
+			Portfolio dbPortfilio = (Portfolio) session.get(Portfolio.class, portfolio.getPortfolioId());
+			session.refresh(dbPortfilio);
+
+			for (Investment investment : portfolio.getInvestements()) {
+				System.out.println(investment.getName());
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			session.close();
 			HibernateUtil.getSessionFactory().close();
 		}
@@ -43,7 +66,7 @@ public class Application {
 		return bond;
 	}
 
-	private static Stock createStock(){
+	private static Stock createStock() {
 		Stock stock = new Stock();
 		stock.setIssuer("Allen Edmonds");
 		stock.setName("Private American Stock Purchases");
@@ -52,7 +75,7 @@ public class Application {
 		stock.setSharePrice(new BigDecimal("100.00"));
 		return stock;
 	}
-	
+
 	private static Bank createBank() {
 		Bank bank = new Bank();
 		bank.setName("First United Federal");

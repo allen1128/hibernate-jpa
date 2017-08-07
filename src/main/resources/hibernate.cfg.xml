@@ -21,5 +21,6 @@
         <mapping class="com.xl.data.entities.Market"/>
         <mapping class="com.xl.data.entities.Stock"/>
         <mapping class="com.xl.data.entities.Bond"/>
+        <mapping class="com.xl.data.entities.Portfolio"/>
     </session-factory>
 </hibernate-configuration>
