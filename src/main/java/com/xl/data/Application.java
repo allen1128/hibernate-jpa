@@ -6,6 +6,7 @@ import java.util.Date;
 import org.hibernate.Session;
 
 import com.xl.data.entities.Account;
+import com.xl.data.entities.AccountType;
 import com.xl.data.entities.Address;
 import com.xl.data.entities.Bank;
 import com.xl.data.entities.Credential;
@@ -21,20 +22,11 @@ public class Application {
 		Session session = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			org.hibernate.Transaction transaction = session.beginTransaction();
-			Currency current = new Currency();
-			current.setCountryName("United States");
-			current.setName("Dollar");
-			current.setSymbol("$");
-			
-			Market market = new Market();
-			market.setCurrency(current);
-			market.setMarketName("New York Nasdaq Market");
-			session.save(market);
-			transaction.commit();
-			
-			Market dbMarket = (Market) session.get(Market.class, market.getMarketId());
-			System.out.println(dbMarket.getMarketName());
+			org.hibernate.Transaction transaction = session.beginTransaction();			
+			Account account = createNewAccount();
+			account.setAccountType(AccountType.SAVING);
+			session.save(account);
+			transaction.commit();			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
