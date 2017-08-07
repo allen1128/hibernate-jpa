@@ -17,5 +17,6 @@
         <mapping class="com.xl.data.entities.Account"/>
         <mapping class="com.xl.data.entities.Transaction"/>
         <mapping class="com.xl.data.entities.Budget"/>
+        <mapping class="com.xl.data.entities.Currency"/>
     </session-factory>
 </hibernate-configuration>

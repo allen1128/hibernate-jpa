@@ -3,40 +3,33 @@ package com.xl.data;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import org.hibernate.Session;
 
 import com.xl.data.entities.Account;
 import com.xl.data.entities.Address;
 import com.xl.data.entities.Bank;
 import com.xl.data.entities.Credential;
+import com.xl.data.entities.Currency;
 import com.xl.data.entities.Transaction;
 import com.xl.data.entities.User;
+import com.xl.data.entities.ids.CurrencyId;
 
 public class Application {
 
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		try {
 			Session session = HibernateUtil.getSessionFactory().openSession();
-			org.hibernate.Transaction transaction = session.beginTransaction();			
-			Bank bank = (Bank) session.get(Bank.class, 6L);
-			session.update(bank);
+			org.hibernate.Transaction transaction = session.beginTransaction();
+			Currency current = new Currency();
+			current.setCountryName("United States");
+			current.setName("Dollar");
+			current.setSymbol("$");
+			session.save(current);
 			transaction.commit();
-			session.close();
 			
 			Session session2 = HibernateUtil.getSessionFactory().openSession();
-			org.hibernate.Transaction transaction2 = session2.beginTransaction();
-			
-			System.out.println(session2.contains(bank));
-			
-			bank.setName("Test Bank");
-			session2.update(bank);
-			System.out.println("Method Invoked");
-			System.out.println(session2.contains(bank));
-			
-			transaction2.commit();
+			Currency current2 = (Currency) session2.get(Currency.class, new CurrencyId("Dollar", "United States"));
+			System.out.println(current2.getSymbol());
 			session2.close();
 			
 		} catch (Exception e) {
@@ -44,18 +37,6 @@ public class Application {
 		}finally{
 			HibernateUtil.getSessionFactory().close();
 		}
-	}*/
-	
-	public static void main(String[] args) {   		
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("finance");
-		EntityManager em = emf.createEntityManager();		
-		EntityTransaction tx =  em.getTransaction();
-		tx.begin();		
-		Bank bank = createBank();		
-		em.persist(bank);		
-		tx.commit();		
-		em.close();
-		emf.close();		
 	}
 
 	private static Bank createBank() {
