@@ -10,6 +10,7 @@ import com.xl.data.entities.Address;
 import com.xl.data.entities.Bank;
 import com.xl.data.entities.Credential;
 import com.xl.data.entities.Currency;
+import com.xl.data.entities.Market;
 import com.xl.data.entities.Transaction;
 import com.xl.data.entities.User;
 import com.xl.data.entities.ids.CurrencyId;
@@ -17,24 +18,27 @@ import com.xl.data.entities.ids.CurrencyId;
 public class Application {
 
 	public static void main(String[] args) {
+		Session session = null;
 		try {
-			Session session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSessionFactory().openSession();
 			org.hibernate.Transaction transaction = session.beginTransaction();
 			Currency current = new Currency();
 			current.setCountryName("United States");
 			current.setName("Dollar");
 			current.setSymbol("$");
-			session.save(current);
+			
+			Market market = new Market();
+			market.setCurrency(current);
+			market.setMarketName("New York Nasdaq Market");
+			session.save(market);
 			transaction.commit();
 			
-			Session session2 = HibernateUtil.getSessionFactory().openSession();
-			Currency current2 = (Currency) session2.get(Currency.class, new CurrencyId("Dollar", "United States"));
-			System.out.println(current2.getSymbol());
-			session2.close();
-			
+			Market dbMarket = (Market) session.get(Market.class, market.getMarketId());
+			System.out.println(dbMarket.getMarketName());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
+			session.close();
 			HibernateUtil.getSessionFactory().close();
 		}
 	}
