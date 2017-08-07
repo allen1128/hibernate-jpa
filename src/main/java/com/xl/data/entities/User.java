@@ -27,7 +27,6 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Formula;
 
-import javassist.expr.NewArray;
 
 @Entity
 @Table(name = "USER")
@@ -48,7 +47,7 @@ public class User implements java.io.Serializable {
 	private String lastName;
 	
 	@ManyToMany(cascade=CascadeType.ALL, mappedBy="users")
-	private Set<Account> accounts = new HashSet<>();
+	private Set<Account> accounts = new HashSet<Account>();
 
 	@Column(name = "BIRTH_DATE", nullable = false)
 	@Temporal(TemporalType.DATE)

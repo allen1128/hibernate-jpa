@@ -17,12 +17,12 @@ public class Credential {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="CREDENTIAL_ID")
-	public Long credentialId;
+	private Long credentialId;
 
 	@OneToOne(cascade=CascadeType.ALL)
 	//@JoinColumn(name="USER_ID", referencedColumnName="USER_ID")
 	@JoinColumn(name="USER_ID")
-	public User user;
+	private User user;
 	
 	@Column(name="USERNAME")
 	private String username;

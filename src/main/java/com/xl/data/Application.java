@@ -1,77 +1,94 @@
 package com.xl.data;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Date;
 
-import org.hibernate.Session;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 
 import com.xl.data.entities.Account;
 import com.xl.data.entities.Address;
+import com.xl.data.entities.Bank;
 import com.xl.data.entities.Credential;
+import com.xl.data.entities.Transaction;
 import com.xl.data.entities.User;
 
 public class Application {
 
-	public static void main(String[] args) {
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		org.hibernate.Transaction transaction = session.beginTransaction();
-
-		/*
-		 * User user = new User(); Address address = new Address();
-		 * user.setAge(22); user.setBirthDate(new Date());
-		 * user.setCreatedBy("Kevin"); user.setCreatedDate(new Date());
-		 * user.setEmailAddress("kmb3"); user.setFirstName("kevin");
-		 * user.setLastName("bowersox"); user.setLastUpdatedBy("kmb");
-		 * user.setLastUpdatedDate(new Date());
-		 * 
-		 * address.setAddressLine1("line 1"); address.setAddressLine2("line2");
-		 * address.setCity("Philadelphia"); address.setState("PA");
-		 * address.setZipCode("12345");
-		 * 
-		 * user.setAddress(address);
-		 */
-
-		/*User user = new User();
-
-		Address address = new Address();
-		Address address2 = new Address();
-		setAddressFields(address);
-		setAddressFields2(address2);
-		user.getAddress().add(address);
-		user.getAddress().add(address2);
-		setUserFields(user);
-
-		Credential credential = new Credential();
-		credential.setPassword("password");
-		credential.setUsername("test1234");
-		credential.setUser(user);
-		user.setCredential(credential);
-		session.save(credential);*/
-		
-		Account account = createNewAccount();
-		Account account2 = createNewAccount();
-		User user = createUser();
-		User user2 = createUser();
-		
-		account.getUsers().add(user);
-		account.getUsers().add(user2);
-		account2.getUsers().add(user);
-		account2.getUsers().add(user2);		
-		
-		user.getAccounts().add(account);
-		user2.getAccounts().add(account);
-		user.getAccounts().add(account2);
-		user2.getAccounts().add(account2);
-		
-		session.save(account);
-		session.save(account2);
-		transaction.commit();
-		
-		User dbUser =  (User) session.get(User.class, user.getUserId());
-		System.out.println("account name:" + dbUser.getAccounts().iterator().next().getAccountId());
-		
+	/*public static void main(String[] args) {
+		try {
+			Session session = HibernateUtil.getSessionFactory().openSession();
+			org.hibernate.Transaction transaction = session.beginTransaction();			
+			Bank bank = (Bank) session.get(Bank.class, 6L);
+			session.update(bank);
+			transaction.commit();
+			session.close();
+			
+			Session session2 = HibernateUtil.getSessionFactory().openSession();
+			org.hibernate.Transaction transaction2 = session2.beginTransaction();
+			
+			System.out.println(session2.contains(bank));
+			
+			bank.setName("Test Bank");
+			session2.update(bank);
+			System.out.println("Method Invoked");
+			System.out.println(session2.contains(bank));
+			
+			transaction2.commit();
+			session2.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			HibernateUtil.getSessionFactory().close();
+		}
+	}*/
+	
+	public static void main(String[] args) {   		
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("finance");
+		EntityManager em = emf.createEntityManager();		
+		EntityTransaction tx =  em.getTransaction();
+		tx.begin();		
+		Bank bank = createBank();		
+		em.persist(bank);		
+		tx.commit();		
+		em.close();
+		emf.close();		
 	}
+
+	private static Bank createBank() {
+		Bank bank = new Bank();
+		bank.setName("First United Federal");
+		bank.setAddressLine1("103 Washington Plaza");
+		bank.setAddressLine2("Suite 332");
+		bank.setCity("New York");
+		bank.setCreatedBy("Kevin Bowersox");
+		bank.setCreatedDate(new Date());
+		bank.setInternational(false);
+		bank.setLastUpdatedBy("Kevin Bowersox");
+		bank.setLastUpdatedDate(new Date());
+		bank.setState("NY");
+		bank.setZipCode("10000");
+		return bank;
+	}
+
+	private static User createUser() {
+		User user = new User();
+		user.getAddress().add(createAddress());
+		user.setBirthDate(new Date());
+		user.setCreatedBy("Kevin Bowersox");
+		user.setCreatedDate(new Date());
+		user.setCredential(createCredential(user));
+		user.setEmailAddress("test@test.com");
+		user.setFirstName("John");
+		user.setLastName("Doe");
+		user.setLastUpdatedBy("system");
+		user.setLastUpdatedDate(new Date());
+		return user;
+	}
+
 	private static Credential createCredential(User user) {
 		Credential credential = new Credential();
 		credential.setUser(user);
@@ -90,19 +107,36 @@ public class Application {
 		return address;
 	}
 
-	private static User createUser() {
-		User user = new User();
-		user.setAddress(Arrays.asList(new Address[]{createAddress()}));
-		user.setBirthDate(new Date());
-		user.setCreatedBy("Kevin Bowersox");
-		user.setCreatedDate(new Date());
-		user.setCredential(createCredential(user));
-		user.setEmailAddress("test@test.com");
-		user.setFirstName("John 2");
-		user.setLastName("Doe");
-		user.setLastUpdatedBy("system");
-		user.setLastUpdatedDate(new Date());
-		return user;
+	private static Transaction createNewBeltPurchase(Account account) {
+		Transaction beltPurchase = new Transaction();
+		beltPurchase.setAccount(account);
+		beltPurchase.setTitle("Dress Belt");
+		beltPurchase.setAmount(new BigDecimal("50.00"));
+		beltPurchase.setClosingBalance(new BigDecimal("0.00"));
+		beltPurchase.setCreatedBy("Kevin Bowersox");
+		beltPurchase.setCreatedDate(new Date());
+		beltPurchase.setInitialBalance(new BigDecimal("0.00"));
+		beltPurchase.setLastUpdatedBy("Kevin Bowersox");
+		beltPurchase.setLastUpdatedDate(new Date());
+		beltPurchase.setNotes("New Dress Belt");
+		beltPurchase.setTransactionType("Debit");
+		return beltPurchase;
+	}
+
+	private static Transaction createShoePurchase(Account account) {
+		Transaction shoePurchase = new Transaction();
+		shoePurchase.setAccount(account);
+		shoePurchase.setTitle("Work Shoes");
+		shoePurchase.setAmount(new BigDecimal("100.00"));
+		shoePurchase.setClosingBalance(new BigDecimal("0.00"));
+		shoePurchase.setCreatedBy("Kevin Bowersox");
+		shoePurchase.setCreatedDate(new Date());
+		shoePurchase.setInitialBalance(new BigDecimal("0.00"));
+		shoePurchase.setLastUpdatedBy("Kevin Bowersox");
+		shoePurchase.setLastUpdatedDate(new Date());
+		shoePurchase.setNotes("Nice Pair of Shoes");
+		shoePurchase.setTransactionType("Debit");
+		return shoePurchase;
 	}
 
 	private static Account createNewAccount() {
@@ -111,7 +145,7 @@ public class Application {
 		account.setOpenDate(new Date());
 		account.setCreatedBy("Kevin Bowersox");
 		account.setInitialBalance(new BigDecimal("50.00"));
-		account.setName("Savings Account 2");
+		account.setName("Savings Account");
 		account.setCurrentBalance(new BigDecimal("100.00"));
 		account.setLastUpdatedBy("Kevin Bowersox");
 		account.setLastUpdatedDate(new Date());

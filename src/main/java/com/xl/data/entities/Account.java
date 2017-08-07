@@ -32,10 +32,10 @@ public class Account {
 	@ManyToMany(cascade=CascadeType.ALL)
 	@JoinTable(name="USER_ACCOUNT", joinColumns=@JoinColumn(name="ACCOUNT_ID"),
 	inverseJoinColumns=@JoinColumn(name="USER_ID"))
-	private Set<User> users = new HashSet<>();
+	private Set<User> users = new HashSet<User>();
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="account")
-	List<Transaction> transactions = new ArrayList<>();
+	List<Transaction> transactions = new ArrayList<Transaction>();
 	
 	@Column(name = "NAME")
 	private String name;

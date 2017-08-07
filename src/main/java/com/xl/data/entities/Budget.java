@@ -34,7 +34,7 @@ public class Budget {
 
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinTable(name="BUDGET_TRANSACTION", joinColumns=@JoinColumn(name="BUDGET_ID"), inverseJoinColumns=@JoinColumn(name="TRANSACTION_ID"))	
-	private List<Transaction> transactions = new ArrayList<>();
+	private List<Transaction> transactions = new ArrayList<Transaction>();
 
 	public Long getBudgetId() {
 		return budgetId;
