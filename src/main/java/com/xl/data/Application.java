@@ -6,15 +6,13 @@ import java.util.Date;
 import org.hibernate.Session;
 
 import com.xl.data.entities.Account;
-import com.xl.data.entities.AccountType;
 import com.xl.data.entities.Address;
 import com.xl.data.entities.Bank;
+import com.xl.data.entities.Bond;
 import com.xl.data.entities.Credential;
-import com.xl.data.entities.Currency;
-import com.xl.data.entities.Market;
+import com.xl.data.entities.Stock;
 import com.xl.data.entities.Transaction;
 import com.xl.data.entities.User;
-import com.xl.data.entities.ids.CurrencyId;
 
 public class Application {
 
@@ -23,9 +21,8 @@ public class Application {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			org.hibernate.Transaction transaction = session.beginTransaction();			
-			Account account = createNewAccount();
-			account.setAccountType(AccountType.SAVING);
-			session.save(account);
+			Stock stock = createStock();
+			session.save(stock);
 			transaction.commit();			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -35,6 +32,27 @@ public class Application {
 		}
 	}
 
+	private static Bond createBond() {
+		Bond bond = new Bond();
+		bond.setInterestRate(new BigDecimal("123.22"));
+		bond.setIssuer("JP Morgan Chase");
+		bond.setMaturityDate(new Date());
+		bond.setPurchaseDate(new Date());
+		bond.setName("Long Term Bond Purchases");
+		bond.setValue(new BigDecimal("10.22"));
+		return bond;
+	}
+
+	private static Stock createStock(){
+		Stock stock = new Stock();
+		stock.setIssuer("Allen Edmonds");
+		stock.setName("Private American Stock Purchases");
+		stock.setPurchaseDate(new Date());
+		stock.setQuantity(new BigDecimal("1922"));
+		stock.setSharePrice(new BigDecimal("100.00"));
+		return stock;
+	}
+	
 	private static Bank createBank() {
 		Bank bank = new Bank();
 		bank.setName("First United Federal");
@@ -53,7 +71,7 @@ public class Application {
 
 	private static User createUser() {
 		User user = new User();
-		user.getAddress().add(createAddress());
+		Address address = createAddress();
 		user.setBirthDate(new Date());
 		user.setCreatedBy("Kevin Bowersox");
 		user.setCreatedDate(new Date());
