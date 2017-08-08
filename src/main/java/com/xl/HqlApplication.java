@@ -20,7 +20,7 @@ public class HqlApplication {
 			org.hibernate.Transaction transaction = session.beginTransaction();
 			
 			Query query = session.createQuery("select distinct t.account from Transaction t " 
-					+ "where t.amount >= 100 and t.transactionType = 'Debit'");
+					+ "where t.amount >= 100 and lower(t.transactionType) = 'debit'");
 			@SuppressWarnings("unchecked")
 			List<Account> accounts = query.list();
 			
