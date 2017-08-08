@@ -1,8 +1,11 @@
 package com.xl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Session;
 
@@ -21,27 +24,37 @@ import com.xl.data.entities.User;
 
 public class Application {
 
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		Session session = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			org.hibernate.Transaction transaction = session.beginTransaction();			
-			UserDao dao = new UserHibernateDao();
-			dao.setSession(session);			
+			/*UserDao dao = new UserHibernateDao();
+			dao.setSession(session);*/			
 			User user = createUser();
-			dao.save(user);
+			Account account = createNewAccount();
+			Bank bank = createBank();
+			account.setBank(bank);
+			
+			Set<Account> accounts = new HashSet<Account>();
+			accounts.add(account);
+			
+			Transaction transaction2 = createNewBeltPurchase(account);
+			List<Transaction> transactions = new ArrayList<Transaction>();
+			transactions.add(transaction2);
+			account.setTransactions(transactions);
+			
+			user.setAccounts(accounts);
+			session.save(user);
 			transaction.commit();
-			List<User> users = dao.findByFirstName("John");
-			for (User u : users){
-				System.out.println(u.getFirstName());
-			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			session.close();
 			HibernateUtil.getSessionFactory().close();
 		}
-	}*/
+	}
 
 	private static Bond createBond() {
 		Bond bond = new Bond();

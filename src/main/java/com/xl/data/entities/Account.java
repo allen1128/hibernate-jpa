@@ -12,12 +12,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -27,7 +29,7 @@ import javax.persistence.Table;
 @Table(name="ACCOUNT")
 @NamedQueries({
 	@NamedQuery(name="Account.over100", query="select distinct t.account from Transaction t " 
-					+ "where t.amount >= 100 and lower(t.transactionType) = 'debit'"),
+					+ "where t.amount >= 50 and lower(t.transactionType) = 'debit'"),
 	@NamedQuery(name="Account.debitAccountDynamicQuery", query="select distinct t.account.accountId, concat(concat(t.account.name, ' '), t.account.createdBy) from Transaction t " 
 					+ "where t.amount >=:amount and t.transactionType like '%ebit' order by t.title")
 })
@@ -49,6 +51,10 @@ public class Account {
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="account")
 	List<Transaction> transactions = new ArrayList<Transaction>();
+	
+	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@JoinColumn(name="BANK_ID")	
+	private Bank bank;
 	
 	@Column(name = "NAME")
 	private String name;
@@ -155,6 +161,14 @@ public class Account {
 
 	public void setAccountType(AccountType accountType) {
 		this.accountType = accountType;
+	}
+
+	public Bank getBank() {
+		return bank;
+	}
+
+	public void setBank(Bank bank) {
+		this.bank = bank;
 	}
 
 	public Date getCreatedDate() {
