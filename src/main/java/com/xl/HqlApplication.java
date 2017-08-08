@@ -1,12 +1,12 @@
 package com.xl;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Scanner;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.xl.data.entities.Account;
 import com.xl.data.entities.Transaction;
 
 public class HqlApplication {
@@ -19,13 +19,13 @@ public class HqlApplication {
 			session = HibernateUtil.getSessionFactory().openSession();
 			org.hibernate.Transaction transaction = session.beginTransaction();
 			
-			Query query = session.createQuery("select t from Transaction t where t.amount <= :amount and t.transactionType = 'Debit'");
-			System.out.println("Please specify an amount");			
-			query.setParameter("amount", new BigDecimal(scanner.next()));			
-			List<Transaction> transactions = query.list();
+			Query query = session.createQuery("select distinct t.account from Transaction t " 
+					+ "where t.amount >= 100 and t.transactionType = 'Debit'");
+			@SuppressWarnings("unchecked")
+			List<Account> accounts = query.list();
 			
-			for (Transaction transaction2: transactions){
-				System.out.println(transaction2.getTitle());
+			for (Account account: accounts){
+				System.out.println(account.getName());
 			}
 			transaction.commit();			
 		} catch (Exception e) {

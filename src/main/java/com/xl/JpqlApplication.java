@@ -10,10 +10,11 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
+import com.xl.data.entities.Account;
 import com.xl.data.entities.Transaction;
 
 public class JpqlApplication {	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		EntityManagerFactory factory = null;
 		EntityManager em = null;
@@ -25,13 +26,14 @@ public class JpqlApplication {
 			tx = em.getTransaction();
 			tx.begin();
 			
-			TypedQuery<Transaction> query = em.createQuery("from Transaction t where t.amount <= ?1 and t.transactionType like '%ebit'  order by t.title ", Transaction.class);
+			TypedQuery<Account> query = em.createQuery("select distinct a from Transaction t " 
+					+ "join t.account a where t.amount >= 100 and t.transactionType like '%ebit'  order by t.title ", Account.class);
 			System.out.println("Please specify an amount");			
 			query.setParameter(1, new BigDecimal(scanner.next()));		
-			List<Transaction> transactions = query.getResultList();
+			List<Account> accounts = query.getResultList();
 			
-			for(Transaction t:transactions){
-				System.out.println(t.getTitle());
+			for (Account account: accounts){
+				System.out.println(account.getName());
 			}
 			
 			tx.commit();
@@ -41,5 +43,5 @@ public class JpqlApplication {
 			em.close();
 			factory.close();
 		}
-	}
+	}*/
 }
