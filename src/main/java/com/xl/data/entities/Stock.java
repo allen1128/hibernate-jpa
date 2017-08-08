@@ -3,11 +3,11 @@ package com.xl.data.entities;
 import java.math.BigDecimal;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 @Entity
-@Table(name = "STOCK")
+@DiscriminatorValue("STK")
 public class Stock extends Investment {
 	@Column(name = "SHARE_PRICE")
 	private BigDecimal sharePrice;
