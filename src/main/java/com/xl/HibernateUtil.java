@@ -1,4 +1,4 @@
-package com.xl.data;
+package com.xl;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;

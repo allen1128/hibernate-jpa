@@ -1,4 +1,4 @@
-package com.xl.data;
+package com.xl;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -21,7 +21,7 @@ import com.xl.data.entities.User;
 
 public class Application {
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		Session session = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
@@ -41,7 +41,7 @@ public class Application {
 			session.close();
 			HibernateUtil.getSessionFactory().close();
 		}
-	}
+	}*/
 
 	private static Bond createBond() {
 		Bond bond = new Bond();
