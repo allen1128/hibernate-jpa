@@ -2,9 +2,12 @@ package com.xl.data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Session;
 
+import com.xl.data.dao.UserHibernateDao;
+import com.xl.data.dao.interfaces.UserDao;
 import com.xl.data.entities.Account;
 import com.xl.data.entities.Address;
 import com.xl.data.entities.Bank;
@@ -22,31 +25,16 @@ public class Application {
 		Session session = null;
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			org.hibernate.Transaction transaction = session.beginTransaction();
-			Portfolio portfolio = new Portfolio();
-			portfolio.setName("Risk Aversive");
-
-			Stock stock = createStock();
-			stock.setPortfolio(portfolio);
-			session.save(stock);
-
-			Bond bond = createBond();
-			bond.setPortfolio(portfolio);
-
-			portfolio.getInvestements().add(stock);
-			portfolio.getInvestements().add(bond);
-			session.save(stock);
-			session.save(bond);
-
+			org.hibernate.Transaction transaction = session.beginTransaction();			
+			UserDao dao = new UserHibernateDao();
+			dao.setSession(session);			
+			User user = createUser();
+			dao.save(user);
 			transaction.commit();
-
-			Portfolio dbPortfilio = (Portfolio) session.get(Portfolio.class, portfolio.getPortfolioId());
-			session.refresh(dbPortfilio);
-
-			for (Investment investment : portfolio.getInvestements()) {
-				System.out.println(investment.getName());
+			List<User> users = dao.findByFirstName("John");
+			for (User u : users){
+				System.out.println(u.getFirstName());
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
