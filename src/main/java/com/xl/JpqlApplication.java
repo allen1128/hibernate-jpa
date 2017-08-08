@@ -12,6 +12,8 @@ import javax.persistence.Query;
 
 import com.xl.data.entities.Account;
 
+import javassist.expr.NewArray;
+
 public class JpqlApplication {	
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
@@ -25,8 +27,10 @@ public class JpqlApplication {
 			tx = em.getTransaction();
 			tx.begin();
 			
-			Query query = em.createQuery("select distinct t.account.accountId, concat(concat(t.account.name, ' '), t.account.accountId) from Transaction t " 
-					+ "where t.amount >= 100 and t.transactionType like '%ebit'  order by t.title ");
+			/*Query query = em.createQuery("select distinct t.account.accountId, concat(concat(t.account.name, ' '), t.account.accountId) from Transaction t " 
+					+ "where t.amount >= 100 and t.transactionType like '%ebit'  order by t.title ");*/
+			Query query = em.createNamedQuery("Account.debitAccountDynamicQuery");
+			query.setParameter("amount",new BigDecimal("99"));
 			List<Object[]> objects = query.getResultList();
 			
 			for (Object[] o: objects){

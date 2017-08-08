@@ -19,8 +19,9 @@ public class HqlApplication {
 			session = HibernateUtil.getSessionFactory().openSession();
 			org.hibernate.Transaction transaction = session.beginTransaction();
 			
-			Query query = session.createQuery("select distinct t.account from Transaction t " 
-					+ "where t.amount >= 100 and lower(t.transactionType) = 'debit'");
+			/*Query query = session.createQuery("select distinct t.account from Transaction t " 
+					+ "where t.amount >= 100 and lower(t.transactionType) = 'debit'");*/
+			Query query = session.getNamedQuery("Account.over100");
 			@SuppressWarnings("unchecked")
 			List<Account> accounts = query.list();
 			

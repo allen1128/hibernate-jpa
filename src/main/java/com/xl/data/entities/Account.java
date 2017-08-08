@@ -18,11 +18,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="ACCOUNT")
+@NamedQueries({
+	@NamedQuery(name="Account.over100", query="select distinct t.account from Transaction t " 
+					+ "where t.amount >= 100 and lower(t.transactionType) = 'debit'"),
+	@NamedQuery(name="Account.debitAccountDynamicQuery", query="select distinct t.account.accountId, concat(concat(t.account.name, ' '), t.account.createdBy) from Transaction t " 
+					+ "where t.amount >=:amount and t.transactionType like '%ebit' order by t.title")
+})
 public class Account {
 
 	@Id
