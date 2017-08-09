@@ -18,6 +18,8 @@ public class HibernateApplication {
 	public static void main(String[] args) {
 		Session session = null;
 		Scanner scanner = new Scanner(System.in);
+		int pageNumber = 3;
+		int pageSize = 5;
 
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
@@ -26,8 +28,9 @@ public class HibernateApplication {
 			Criterion criterion = Restrictions.ge("amount",  new BigDecimal("20.00"));
 			Criterion criterion2 = Restrictions.eq("transactionType", "Debit");
 			Criteria criteria = session.createCriteria(Transaction.class).add(Restrictions.and(criterion, criterion2)).addOrder(Order.desc("title"));
-			List<Transaction> transactions = criteria.list();
-			
+			criteria.setFirstResult((pageNumber - 1) * pageSize);
+			criteria.setMaxResults(pageSize);
+			List<Transaction> transactions = criteria.list();			
 			for (Transaction transaction1 : transactions) {
 				System.out.println(transaction1.getAmount());
 			}

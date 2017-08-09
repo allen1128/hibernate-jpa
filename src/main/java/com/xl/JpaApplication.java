@@ -23,6 +23,8 @@ public class JpaApplication {
 		EntityManagerFactory factory = null;
 		EntityManager em = null;
 		EntityTransaction tx = null;
+		int pageNumber = 1;
+		int pageSize = 5;
 		
 		try{
 			factory = Persistence.createEntityManagerFactory("finance");
@@ -38,6 +40,8 @@ public class JpaApplication {
 			Path<String> transactionTypePath = root.get("transactionType");				
 			cq.select(root).where(cb.and(cb.gt(amountPath, new BigDecimal("20.00"))), cb.equal(transactionTypePath, "Debit"));			
 			TypedQuery<Transaction> query = em.createQuery(cq);
+			query.setFirstResult((pageNumber-1) * pageSize);
+			query.setMaxResults(pageSize);
 			List<Transaction> transactions = query.getResultList();
 			for (Transaction transaction : transactions){
 				System.out.println(transaction.getTitle());
