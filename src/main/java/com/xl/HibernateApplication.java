@@ -1,11 +1,14 @@
 package com.xl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Scanner;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import com.xl.data.entities.Account;
 import com.xl.data.entities.Transaction;
@@ -19,11 +22,14 @@ public class HibernateApplication {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			org.hibernate.Transaction transaction = session.beginTransaction();
-			Criteria criteria = session.createCriteria(Transaction.class).addOrder(Order.desc("title"));
-			List<Account> accounts = criteria.list();
 			
-			for (Account account : accounts) {
-				System.out.println(account.getName());
+			Criterion criterion = Restrictions.ge("amount",  new BigDecimal("20.00"));
+			Criterion criterion2 = Restrictions.eq("transactionType", "Debit");
+			Criteria criteria = session.createCriteria(Transaction.class).add(Restrictions.and(criterion, criterion2)).addOrder(Order.desc("title"));
+			List<Transaction> transactions = criteria.list();
+			
+			for (Transaction transaction1 : transactions) {
+				System.out.println(transaction1.getAmount());
 			}
 			transaction.commit();
 		} catch (Exception e) {

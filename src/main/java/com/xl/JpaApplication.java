@@ -1,5 +1,6 @@
 package com.xl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,6 +11,7 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import com.xl.data.entities.Transaction;
@@ -28,12 +30,13 @@ public class JpaApplication {
 			tx = em.getTransaction();
 			tx.begin();
 			
-			//select * from transaction t
+			//select * from transaction t where amount = '20.00' and transac
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Transaction> cq = cb.createQuery(Transaction.class);
-			Root<Transaction> root = cq.from(Transaction.class);			
-			cq.select(root);
-			
+			Root<Transaction> root = cq.from(Transaction.class);
+			Path<BigDecimal> amountPath = root.get("amount");
+			Path<String> transactionTypePath = root.get("transactionType");				
+			cq.select(root).where(cb.and(cb.gt(amountPath, new BigDecimal("20.00"))), cb.equal(transactionTypePath, "Debit"));			
 			TypedQuery<Transaction> query = em.createQuery(cq);
 			List<Transaction> transactions = query.getResultList();
 			for (Transaction transaction : transactions){
